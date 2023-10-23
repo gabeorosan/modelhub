@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 import requests
 import os
 API_TOKEN = os.environ.get('API_TOKEN')
-
 app = Flask(__name__)
 
 MODELS = [
@@ -42,5 +41,6 @@ def home():
     return render_template('index.html', responses=responses, user_input=user_input)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
 
