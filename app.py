@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import requests
-from tokens import api_token
+import os
+API_TOKEN = os.environ.get('API_TOKEN')
 
 app = Flask(__name__)
 
@@ -8,17 +9,17 @@ MODELS = [
     {
         "name": "Mistral-7B-v0.1",
         "url": "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-v0.1",
-        "token": api_token
+        "token": API_TOKEN
     },
     {
         "name": "zephyr-7b-alpha",
         "url": "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-alpha",
-        "token": api_token
+        "token": API_TOKEN
     },
     {
         "name": "Llama-2-7b-chat-hf",
         "url": "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf",
-        "token": api_token
+        "token": API_TOKEN
     }
 ]
 
