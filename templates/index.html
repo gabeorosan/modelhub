@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Hub</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h2 class="mb-4">Model Hub</h2>
+    
+    <form action="/" method="post" class="mb-4">
+        <div class="form-group">
+            <label for="prompt">Type Your Prompt:</label>
+            <textarea name="prompt" class="form-control" rows="4">{{ user_input }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <h4>Model Responses:</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Model Name</th>
+                <th>Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for model_name, response in responses.items() %}
+            <tr>
+                <td>{{ model_name }}</td>
+                <td>{{ response }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
