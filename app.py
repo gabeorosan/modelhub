@@ -25,6 +25,7 @@ MODELS = [
 @app.route('/', methods=['GET', 'POST'])
 def home():
     responses = {}
+    user_input = ""
     if request.method == 'POST':
         user_input = request.form.get('prompt')
         payload = {
