@@ -85,11 +85,39 @@ def home():
         user_models = []
     user_input = ""
     responses = {}
+
     if request.method == 'POST':
         user_input = request.form.get('prompt')
+        image = request.files.get('image')
+
         for model in user_models:
-            responses[model.name] = query_model(user_input, model.url, model.api_token)
+            if user_input:  # If user entered text
+                responses[model.name] = query_model(user_input, model.url, model.api_token)
+            elif image:  # If user uploaded an image
+                # Save the uploaded image temporarily
+                filename = os.path.join("temp", image.filename)
+                image.save(filename)
+
+                # Use the image to get response
+                responses[model.name] = query_vision_model(filename, model.url, model.api_token)
+                print(responses[model.name])
+                # Optionally, remove the saved image if no longer needed
+                os.remove(filename)
+
     return render_template('index.html', models=user_models, model_responses=responses , user_input=user_input)
+
+
+def query_vision_model(filename, api_url, api_token):
+    headers = {"Authorization": f"Bearer {api_token}"}
+    with open(filename, "rb") as f:
+        data = f.read()
+    try:
+        response_data = requests.post(api_url, headers=headers, data=data)
+        response_data.raise_for_status()  # Raise an error for HTTP errors
+        res = response_data.json()  # Modify this as per the actual response structure
+    except requests.RequestException:
+        res = "Error retrieving response from this model."
+    return res
 
 def query_model(prompt, api_url, api_token):
     headers = {"Authorization": f"Bearer {api_token}"}

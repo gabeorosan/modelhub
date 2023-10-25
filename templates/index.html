@@ -30,10 +30,18 @@
 
 <div class="container mt-5">
     
-    <form action="/" method="post" class="mb-4">
+    <form action="/" method="post" enctype="multipart/form-data" class="mb-4">
         <div class="form-group">
             <label for="prompt">Type Your Prompt:</label>
             <textarea name="prompt" class="form-control" rows="4">{{ user_input }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="imageInput">Upload an Image:</label>
+            <input type="file" class="form-control" name="image" id="imageInput" accept="image/*">
+        </div>
+        <!-- Image Preview -->
+        <div class="form-group">
+            <img id="imagePreview" src="#" alt="Image Preview" class="img-fluid" style="display:none;">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -187,7 +195,21 @@
                 }
             });
         }
+        function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
+            reader.onload = function(e) {
+                $('#imagePreview').attr('src', e.target.result).show(); // Display the image preview.
+            }
+
+            reader.readAsDataURL(input.files[0]); // Convert image to base64.
+        }
+    }
+
+    $("#imageInput").change(function() {
+        readURL(this);
+    });
 
     </script>
 
