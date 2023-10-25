@@ -15,6 +15,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 oauth = OAuth(app)
 
+UPLOAD_FOLDER = 'temp'
+ABS_UPLOAD_FOLDER = os.path.join(os.getcwd(), UPLOAD_FOLDER)
+
+if not os.path.exists(ABS_UPLOAD_FOLDER):
+    os.makedirs(ABS_UPLOAD_FOLDER)
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     google_id = db.Column(db.String(80), unique=True, nullable=False)
@@ -95,12 +102,10 @@ def home():
                 responses[model.name] = query_model(user_input, model.url, model.api_token)
             elif image:  # If user uploaded an image
                 # Save the uploaded image temporarily
-                filename = os.path.join("temp", image.filename)
+                filename = os.path.join(ABS_UPLOAD_FOLDER, image.filename)
                 image.save(filename)
-
                 # Use the image to get response
                 responses[model.name] = query_vision_model(filename, model.url, model.api_token)
-                print(responses[model.name])
                 # Optionally, remove the saved image if no longer needed
                 os.remove(filename)
 
